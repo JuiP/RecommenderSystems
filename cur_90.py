@@ -69,7 +69,8 @@ def main():
             else:
                 test[i][j] = test[i][j] - mean
   
-    #k factor for CUR   
+    #k factor for CUR  
+    start = time.time() 
     k = 250
     #computing the sum of all elements squared
     total_sum_sq = 0.0

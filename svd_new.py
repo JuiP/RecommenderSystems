@@ -103,14 +103,16 @@ def main():
                 #computing rmse
                 squares_sum = squares_sum + (answer[i][j] - matrix_centered_zero[i][j])**2
                 count_sq = count_sq + 1.0
-                print("Root mean squared error")
-                print(math.sqrt(squares_sum / count_sq))
+                
                 if(count_sq > 1):
-                    print("Spearman's correlation")
-                    correlation = 1 - ((6 * squares_sum) / (count_sq**3 - count_sq))
-                    print(correlation)
+                   
                 print("")
     #calculation of the precision at top k
+    print("Root mean squared error")
+    print(math.sqrt(squares_sum / count_sq))
+    print("Spearman's correlation")
+    correlation = 1 - ((6 * squares_sum) / (count_sq**3 - count_sq))
+    print(correlation)
     precision_rating.sort(reverse=True)
     countk = 0.0
     for i in range(0, precision_k):

@@ -72,7 +72,7 @@ def main():
   
     #k factor of CUR decomposition
     k = 250
-
+    start = time.time()
     #calculate the total sum of the sqaures of the elements
     total_sum_sq = 0.0
     for i in range(1,num_of_users):
