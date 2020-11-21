@@ -103,8 +103,6 @@ def main():
                 #computing rmse
                 squares_sum = squares_sum + (answer[i][j] - matrix_centered_zero[i][j])**2
                 count_sq = count_sq + 1.0
-                
-                if(count_sq > 1):
                    
                 print("")
     #calculation of the precision at top k
@@ -121,7 +119,8 @@ def main():
     precision_at_topk = countk / precision_k
     print("Precision at top k")
     print(precision_at_topk)
-
+    print("Time required for collaborative filtering ")
+    print("--- %s seconds ---" % (time.time() - start))
 
     
 if __name__== "__main__":
