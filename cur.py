@@ -146,13 +146,13 @@ def main():
                 #compute the rmse
                 squares_sum = squares_sum + (answer[i][j] - user_movie_matrix[i][j])**2
                 count_sq = count_sq + 1.0
-                print("Root mean squared error")
-                print(math.sqrt(squares_sum / count_sq))
-                if(count_sq > 1):
-                    print("Spearman's correlation")
-                    correlation = 1 - ((6 * squares_sum) / (count_sq**3 - count_sq))
-                    print(correlation)
+                    
                 print("")
+    print("Root mean squared error")
+    print(math.sqrt(squares_sum / count_sq))
+    print("Spearman's correlation")
+    correlation = 1 - ((6 * squares_sum) / (count_sq**3 - count_sq))
+    print(correlation)
     #calculation of precision at top k
     precision_rating.sort(reverse=True)
     countk = 0.0
@@ -162,7 +162,10 @@ def main():
     precision_at_topk = countk / precision_k
     print("Precision at top k")
     print(precision_at_topk)
+    print("Time required for collaborative filtering ")
+    print("--- %s seconds ---" % (time.time() - start))
 
 if __name__== "__main__":
     main()
+
 
