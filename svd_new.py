@@ -17,6 +17,12 @@ def preprocess():
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
+    ratings= ratings.to_numpy()
+    indices = list(range(ratings.shape[0]))
+    random.shuffle(indices)
+    ratings = ratings[indices]
+    ratings= pd.DataFrame(ratings)
+    ratings = ratings.rename(columns={0: 'user_id',1 : 'movie_id',2 : 'rating', 3: 'unix_timestamp'},inplace= False)
     ratings = ratings[['user_id', 'movie_id', 'rating']]
     ratings_list = ratings.values.tolist()
     user_movie_matrix = np.zeros((num_of_users,num_of_movies))

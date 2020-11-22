@@ -176,7 +176,7 @@ def main():
     precision_at_topk = countk / precision_k
     print("Precision at top k")
     print(precision_at_topk)
-    print("Time required for collaborative filtering ")
+    print("Time required for CUR ")
     print("--- %s seconds ---" % (time.time() - start))
 
 if __name__== "__main__":

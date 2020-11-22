@@ -2,6 +2,7 @@ import pandas as pd
 import numpy as np
 import math
 import time
+import random
 
 precision_k = 458
 num_of_users = 6040 + 1
@@ -16,6 +17,12 @@ def preprocess():
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
+    ratings= ratings.to_numpy()
+    indices = list(range(ratings.shape[0]))
+    random.shuffle(indices)
+    ratings = ratings[indices]
+    ratings= pd.DataFrame(ratings)
+    ratings = ratings.rename(columns={0: 'user_id',1 : 'movie_id',2 : 'rating', 3: 'unix_timestamp'},inplace= False)
     #removing the timestamp
     ratings = ratings[['user_id', 'movie_id', 'rating']]
     #converting to list

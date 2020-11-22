@@ -2,15 +2,28 @@ import pandas as pd
 import numpy as np
 import math
 import time
+import random
 
 precision_k = 25
 num_of_users = 6040 + 1
 num_of_movies= 3952 + 1
 num_of_ratings = 1000209
-def main():
+
+def preprocess() :
+    '''
+    preprocessing the data by loading data into user_movie_matrix
+    returns : matrix_without_test_data,user_movie_matrix,global_av
+    '''
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
+    ratings= ratings.to_numpy()
+    indices = list(range(ratings.shape[0]))
+    random.shuffle(indices)
+    ratings = ratings[indices]
+    ratings= pd.DataFrame(ratings)
+    ratings = ratings.rename(columns={0: 'user_id',1 : 'movie_id',2 : 'rating', 3: 'unix_timestamp'},inplace= False)
+
     #removing the timestamp
     ratings = ratings[['user_id', 'movie_id', 'rating']]
     #converting to list
@@ -34,6 +47,14 @@ def main():
     for i in range(1,101):
         for j in range(1,101):
             matrix_without_test_data[i][j] = 0.0
+    return matrix_without_test_data,user_movie_matrix,global_av
+
+def center(matrix_without_test_data):
+    '''
+    centering the matrix around mean
+    parameters : matrix_without_test_data
+    returns : matrix_without_test_data
+    '''
     #centering the training data set
     for i in range(1,num_of_users):
         sum = 0.0
@@ -50,6 +71,15 @@ def main():
                 matrix_without_test_data[i][j] = matrix_without_test_data[i][j] - mean
             else:
                 matrix_without_test_data[i][j] = mean
+    return matrix_without_test_data
+
+
+def main(matrix_without_test_data,user_movie_matrix,global_av):
+    '''
+    Predicting values and calculating errors
+    parameters : matrix_without_test_data,user_movie_matrix,global_av
+    Finally prints RMSE , top k precision ,Spearman  
+    '''
     similarity = 0.0
     predict = 0.0
     count = 0.0
@@ -143,8 +173,10 @@ def main():
     precision_at_topk = countk / precision_k
     print("Precision at top k")
     print(precision_at_topk)
-    print("Time required for collaborative filtering ")
+    print("Time required for collaborative filtering with global baseline ")
     print("--- %s seconds ---" % (time.time() - start))
     
 if __name__ == "__main__":
-    main()
+    matrix_without_test_data,user_movie_matrix,global_av = preprocess()
+    matrix_without_test_data = center(matrix_without_test_data)
+    main(matrix_without_test_data,user_movie_matrix,global_av)
