@@ -10,6 +10,10 @@ num_of_movies= 3952 + 1
 num_of_ratings = 1000209
 
 def preprocess():
+    '''
+    preprocessing the data by loading data into user_movie_matrix
+    returns :user_movie_matrix
+    '''
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
@@ -31,6 +35,11 @@ def preprocess():
     return user_movie_matrix
 
 def center(user_movie_matrix):
+    '''
+    centering the matrix around mean
+    parameters : user_movie_matrix
+    returns : matrix_centered_zero
+    '''
     matrix_centered_zero = np.copy(user_movie_matrix)
     #center the test data set about the mean
     mean = 0.0
