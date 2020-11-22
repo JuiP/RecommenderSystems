@@ -8,7 +8,8 @@ precision_k = 5000
 num_of_users = 6040 + 1
 num_of_movies= 3952 + 1
 num_of_ratings = 1000209
-def main():
+
+def preprocess():
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
@@ -22,7 +23,9 @@ def main():
         movie_id = ratings_list[i][1]
         rating = ratings_list[i][2]
         user_movie_matrix[user_id][movie_id] = rating
+    return user_movie_matrix
 
+def center(user_movie_matrix):
     matrix_centered_zero = np.copy(user_movie_matrix)
     #center the test data set about the mean
     mean = 0.0
@@ -42,13 +45,14 @@ def main():
             else:
                 matrix_centered_zero[i][j] = matrix_centered_zero[i][j] - mean
 
+    global test
     #compute the training data by removing the values in the 1000*1000 matrix
     test = np.copy(matrix_centered_zero)
     for i in range(1,1001):
         for j in range(1,1001):
             if(matrix_centered_zero[i][j] != 0):
                 test[i][j] = -1
-    
+
     #recenter the training data about mean
     mean = 0.0
     for i in range(1,num_of_users):
@@ -69,7 +73,12 @@ def main():
                 test[i][j] = mean
             else:
                 test[i][j] = test[i][j] - mean
-  
+    return matrix_centered_zero
+
+def main():
+    
+    user_movie_matrix = preprocess()
+    matrix_centered_zero = center(user_movie_matrix)
     #k factor of CUR decomposition
     k = 250
     start = time.time()
