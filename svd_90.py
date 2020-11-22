@@ -71,6 +71,8 @@ def main():
                 test[i][j] = mean
             else:
                 test[i][j] = test[i][j] - mean
+                
+    start = time.time()
     #Compute A transpose multiplied A        
     AtA = np.dot(np.transpose(test), test)
     #compute the eigen vectors and values
@@ -136,9 +138,8 @@ def main():
                 squares_sum = squares_sum + (answer[i][j] - matrix_centered_zero[i][j])**2
                 count_sq = count_sq + 1.0
                 
-                if(count_sq > 1):
-                    
-                print("")
+                #if(count_sq > 1): 
+                #print("")
     print("Root mean squared error")
     print(math.sqrt(squares_sum / count_sq))
     print("Spearman's correlation")
