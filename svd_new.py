@@ -8,7 +8,12 @@ precision_k = 5000
 num_of_users = 6040 + 1
 num_of_movies= 3952 + 1
 num_of_ratings = 1000209
-def main():
+
+def preprocess():
+    '''
+    preprocessing the data by loading data into user_movie_matrix
+    returns :user_movie_matrix
+    '''
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
@@ -21,7 +26,15 @@ def main():
         movie_id = ratings_list[i][1]
         rating = ratings_list[i][2]
         user_movie_matrix[user_id][movie_id] = rating
-    
+
+    return user_movie_matrix
+
+def center(user_movie_matrix):
+    '''
+    centering the matrix around mean
+    parameters : user_movie_matrix
+    returns : matrix_centered_zero,test
+    '''
     matrix_centered_zero = np.copy(user_movie_matrix)
     mean = 0.0
     #centering the matrix about mean
@@ -46,7 +59,14 @@ def main():
         for j in range(1,1001):
             if(matrix_centered_zero[i][j] != 0):
                 test[i][j] = -1
-    
+    return matrix_centered_zero,test
+
+def main(matrix_centered_zero,test):
+    '''
+    Calculating S,V,D and then predicting values and calculating errors
+    parameters : matrix_centered_zero,test
+    Finally prints RMSE , top k precision ,Spearman  
+    '''
     mean = 0.0
     #centering the training data set
     for i in range(1,num_of_users):
@@ -119,9 +139,11 @@ def main():
     precision_at_topk = countk / precision_k
     print("Precision at top k")
     print(precision_at_topk)
-    print("Time required for collaborative filtering ")
+    print("Time required for SVD ")
     print("--- %s seconds ---" % (time.time() - start))
 
     
 if __name__== "__main__":
-    main()
+    user_movie_matrix = preprocess()
+    matrix_centered_zero,test = center(user_movie_matrix) 
+    main(user_movie_matrix,test)

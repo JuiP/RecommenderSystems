@@ -8,7 +8,11 @@ num_of_users = 6040 + 1
 num_of_movies= 3952 + 1
 num_of_ratings = 1000209
 
-def main():
+def preprocess():
+    '''
+    preprocessing the data by loading data into user_movie_matrix
+    returns :user_movie_matrix, matrix_without_test_data
+    '''
     #Reading ratings file:
     r_cols = ['user_id', 'movie_id', 'rating', 'unix_timestamp']
     ratings = pd.read_csv('ml-1m/ratings.dat', sep="::", names=r_cols,encoding='latin-1',engine='python')
@@ -29,6 +33,15 @@ def main():
     for i in range(1,101):
         for j in range(1,101):
             matrix_without_test_data[i][j] = 0.0
+
+    return user_movie_matrix, matrix_without_test_data
+
+def center(matrix_without_test_data):
+    '''
+    centering the matrix around mean
+    parameters : matrix_without_test_data
+    returns : matrix_without_test_data
+    '''
     #centering the matrix around mean
     for i in range(1,num_of_movies):
         sum = 0.0
@@ -47,6 +60,15 @@ def main():
                 matrix_without_test_data[i][j] = matrix_without_test_data[i][j] - mean
             else:
                 matrix_without_test_data[i][j] = mean
+    return matrix_without_test_data
+
+
+def main(user_movie_matrix, matrix_without_test_data):
+    '''
+    Predicting values and calculating errors
+    parameters : user_movie_matrix, matrix_without_test_data
+    Finally prints RMSE , top k precision ,Spearman  
+    '''
     similarity = 0.0
     predict = 0.0
     count = 0.0
@@ -112,6 +134,9 @@ def main():
     print("--- %s seconds ---" % (time.time() - start))
 
 if __name__ == "__main__":
-    main()
+    # global user_movie_matrix, matrix_without_test_data 
+    user_movie_matrix, matrix_without_test_data = preprocess()
+    matrix_without_test_data = center(matrix_without_test_data)
+    main(user_movie_matrix, matrix_without_test_data)
 
 
